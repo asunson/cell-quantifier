@@ -31,10 +31,6 @@ Right now this program makes the following key assumption about the folder layou
 
 Provide the path to the experiment folder in the file "paths.txt". Please put each path on a separate line. 
 
-Mac example: `/Users/ASun/Documents/2018-19/iPython Notebooks/Exp. 21/`
-
-Windows example: `J:\OncRsrch\Lymph\Lab Users\Aaron\Other\Exp.21\`
-
 Windows uses backslashes ("\\") whereas Macs use foward slashes ("/")
 
 Then, making sure that python is properly installed, open up a command prompt and type: 
