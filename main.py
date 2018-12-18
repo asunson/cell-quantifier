@@ -12,7 +12,7 @@ file = open(os.path.join(__location__, 'paths.txt'), "r")
 experiments = file.readlines()
 
 # remove comments from paths.txt
-experiments = [e for e in experiments if not e.startswith("#")]
+experiments = [e.strip('\n') for e in experiments if not e.startswith("#")]
 
 # find all culture types used within each experiment
 for e in experiments:
