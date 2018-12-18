@@ -40,12 +40,12 @@ def nothing(x):
 Clear any existing window with name 'image' and attach mouse call back function 
 and trackbars for threshold and area.  
 """
-def remakeWindow(t, a, pickCells):
-    cv2.destroyWindow('image')
-    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-    cv2.setMouseCallback('image', pickCells)
-    cv2.createTrackbar("min Threshold", "image", t, 100, nothing)
-    cv2.createTrackbar("min Area", "image", a, 200, nothing)
+def remakeWindow(t, a, pickCells, name):
+    cv2.destroyWindow(name)
+    cv2.namedWindow(name, cv2.WINDOW_NORMAL)
+    cv2.setMouseCallback(name, pickCells)
+    cv2.createTrackbar("min Threshold", name, t, 100, nothing)
+    cv2.createTrackbar("min Area", name, a, 200, nothing)
 
 """
 Filter candidate cells by area (default 35 pixels). This value should be user defined based
@@ -99,23 +99,23 @@ def quantifyCells(imgnames):
         old_t = 40
         old_a = 35
         numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, old_t, old_a)
-        remakeWindow(old_t, old_a, pickCells)
+        remakeWindow(old_t, old_a, pickCells, raw_imgnames[i])
 
         while(1):
-            t = cv2.getTrackbarPos("min Threshold", "image")
-            a = cv2.getTrackbarPos("min Area", "image")
+            t = cv2.getTrackbarPos("min Threshold", raw_imgnames[i])
+            a = cv2.getTrackbarPos("min Area", raw_imgnames[i])
 
             # if either trackbar position changes, update image and window with new values
             if t != old_t or a != old_a:
                 numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a)
-                remakeWindow(t, a, pickCells)
+                # remakeWindow(t, a, pickCells)
 
             # update previous t and a
             old_t = t
             old_a = a
 
             # display image
-            cv2.imshow('image', c_img)
+            cv2.imshow(raw_imgnames[i], c_img)
             k = cv2.waitKey(200) & 0xFF
             if k == 13:
                 # append number of cells to final list
@@ -128,21 +128,23 @@ def quantifyCells(imgnames):
                             cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 255, 0), 1)
                 
                 # find directory to save file in
-                directory = os.path.join(imgnames[i][:-len(raw_imgnames[i])], "Cell Count")
-                
+                directory = os.path.join(imgnames[i][:-len(raw_imgnames[i])], "Cell Counts")
+
                 # save annotated image
                 cv2.imwrite(os.path.join(directory, raw_imgnames[i].split('.')[-2] + " cell count.jpg"), c_img)
                 break
 
-            # undo changes
+            # undo last change
             if k == ord('z'):
                 c_img = np.copy(c_img_copy)
                 numCells = numCells_copy
 
             # reset image and default values
             if k == ord('r'):
-                remakeWindow(40, 35, pickCells)
-
+                cv2.setTrackbarPos("min Threshold", raw_imgnames[i], 40)
+                cv2.setTrackbarPos("min Area", raw_imgnames[i], 35)
+                numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a)
+                
             # print values for debugging
             elif k == ord('a'):
                 print("Current Threshold: ", t)

@@ -31,17 +31,13 @@ Right now this program makes the following key assumption about the folder layou
 
 Provide the path to the experiment folder in the file "paths.txt". Please put each path on a separate line. 
 
-Mac example: `/Users/ASun/Documents/2018-19/iPython Notebooks/Exp. 21/`
-
-Windows example: `J:\OncRsrch\Lymph\Lab Users\Aaron\Other\Exp.21\`
-
 Windows uses backslashes ("\\") whereas Macs use foward slashes ("/")
 
-Then, making sure that python is properly installed, open up a command prompt and type: 
-
-`python3 main.py`
+Then, making sure that python is properly installed, double click the shortcut labeled "cell quantifier". It will open up a command prompt to run the program. 
 
 The program should start up and display the first image to be quantified. Initially, it will detect as many cells as possible based on the default threshold and minimum area values. Manual controls can be used to modify values and add/remove cells. 
+
+If you would like to exit early, make sure you close out of the command prompt rather than the image window. 
 
 ---
 
@@ -77,7 +73,7 @@ Things I should implement in the future:
 
 * Make gaussian blur modifiable
 
-* Early exit feature
+* Early exit feature (other than x'ing out of the command prompt or giving a keyboard interrupt)
 
 
 

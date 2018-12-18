@@ -4,12 +4,15 @@ import os
 import pandas as pd
 import quantify
 
-# path = "/Users/ASun/Documents/2018-19/iPython Notebooks/Exp. 21/LEC co-culture/"
-
 # read experiments to quantify from user modified text file
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-file = open("paths.txt", "r") 
+file = open(os.path.join(__location__, 'paths.txt'), "r") 
 experiments = file.readlines()
+
+# remove comments from paths.txt
+experiments = [e for e in experiments if not e.startswith("#")]
 
 # find all culture types used within each experiment
 for e in experiments:
