@@ -1,6 +1,7 @@
 # import necessary packages 
 import numpy as np
 import cv2
+import os
 
 """
 Define behavior for counting/removing additional cells
@@ -86,7 +87,7 @@ def quantifyCells(imgnames):
     
     images = [cv2.imread(img, cv2.IMREAD_GRAYSCALE) for img in imgnames]
     # collect list of image names without the path
-    raw_imgnames = [s.split('/')[-1] for s in imgnames]
+    raw_imgnames = [s.split(os.sep)[-1] for s in imgnames]
     
     final_cell_counts = []
     thresholds = []
@@ -125,9 +126,12 @@ def quantifyCells(imgnames):
                 # (additional/removed/original counts))
                 cv2.putText(c_img, "Cell Count: " + str(numCells), (50,50), 
                             cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 255, 0), 1)
+                
+                # find directory to save file in
+                directory = os.path.join(imgnames[i][:-len(raw_imgnames[i])], "Cell Count")
+                
                 # save annotated image
-                directory = imgnames[i][:-len(raw_imgnames[i])] + "Cell Count"
-                cv2.imwrite(directory + "/" + raw_imgnames[i].split('.')[-2] + " cell count.jpg", c_img)
+                cv2.imwrite(os.path.join(directory, raw_imgnames[i].split('.')[-2] + " cell count.jpg"), c_img)
                 break
 
             # undo changes
