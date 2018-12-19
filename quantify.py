@@ -4,7 +4,7 @@ import cv2
 import os
 
 """
-Define behavior for counting/removing additional cells
+Define behavior for adding/removing cells from count
 """
 def pickCells(event, x, y, flags, param):
     global numCells, numCells_copy, c_img, c_img_copy
@@ -14,7 +14,6 @@ def pickCells(event, x, y, flags, param):
         c_img_copy = np.copy(c_img)
         numCells_copy = numCells
         
-#         print("Adding Cell...")
         cv2.circle(c_img,(x,y), 6, (255,0,0), 1)
         numCells += 1
 
@@ -23,7 +22,6 @@ def pickCells(event, x, y, flags, param):
         c_img_copy = np.copy(c_img)
         numCells_copy = numCells
     
-#         print("Removing Cell...")
         # draw an x
         cv2.line(c_img, (x + 5, y + 5), (x - 5, y - 5), (0,0,255), 1)
         cv2.line(c_img, (x - 5, y + 5), (x + 5, y - 5), (0,0,255), 1)
@@ -108,7 +106,6 @@ def quantifyCells(imgnames):
             # if either trackbar position changes, update image and window with new values
             if t != old_t or a != old_a:
                 numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a)
-                # remakeWindow(t, a, pickCells)
 
             # update previous t and a
             old_t = t
