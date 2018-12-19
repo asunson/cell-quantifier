@@ -1,0 +1,7 @@
+# place folder names that you don't want quantified here
+# for example, if you have folders VEGF-C 3nM and VEGF-C 6nM, but you already quantified VEGF-C 3nM, list it on a line in this file
+
+# like so
+VEGF-C 3nM
+
+# now the program will skip over it as it proceeds through the files 
