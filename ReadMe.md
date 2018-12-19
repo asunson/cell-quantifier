@@ -55,13 +55,13 @@ Threshold and Minimum Area bars: threshold and min area values can be modified b
 
 * Right click = Remove a cell. This draws a red X on the image and decrements the total cell count.
 
-* "Z" = Undo. Undoes the last action.
+* "A" = Debugging information. Will print the current cell count, threshold, and min area in the command prompt. 
 
 * "R" = Reset. Resets the image to default values and erases and marks. 
 
-* Enter = Done. Marks the image as complete, writes the total cell count onto the image, saves it, and loads the next in the series. 
+* "Z" = Undo. Undoes the last action.
 
-* "A" = Debugging information. Will print the current cell count, threshold, and min area in the command prompt. 
+* Enter = Done. Marks the image as complete, writes the total cell count onto the image, saves it, and loads the next in the series. 
 
 ## Future Features
 
