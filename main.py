@@ -12,21 +12,55 @@ file = open(os.path.join(__location__, 'paths.txt'), "r")
 experiments = file.readlines()
 
 # remove comments from paths.txt
-experiments = [e.strip('\n') for e in experiments if not e.startswith("#")]
+experiments = [e.strip('\n') for e in experiments if not e.startswith('#')]
+experiments = [e for e in experiments if e is not '']
 
 # find all culture types used within each experiment
 for e in experiments:
-    culture_types = [os.path.join(e, d) for d in os.listdir(e) if os.path.isdir(os.path.join(e, d))]
+    # ask for user input before proceeding with experiment number
+    print("********** Now looking at " + e.split(os.sep)[-1] + "**********")
+    
+    response = ''
+    while(True):
+        response = input('Would you like to proceed? (y/n)')
+        if response in ['y', 'n']:
+            break
+    if response == 'n':
+        continue
+
+    culture_types = [os.path.join(e, d) 
+                        for d in os.listdir(e) 
+                        if os.path.isdir(os.path.join(e, d))]
     
     # iterate through experimental conditions within each culture type
     for path in culture_types:
-        experiment_conditions = [os.path.join(path, d) for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+
+        experiment_conditions = [os.path.join(path, d) 
+                                    for d in os.listdir(path) 
+                                    if os.path.isdir(os.path.join(path, d))]
 
         # create excel sheet to store quantification results for a given culture and corresponding conditions
-        writer = pd.ExcelWriter(os.path.join(path, "Quantification Results.xlsx"))
+        writer = pd.ExcelWriter(os.path.join(path, 
+            path.split(os.sep)[-1] + " Quantification Results.xlsx"))
         
         # each condition contains images to be quantified. Scan through each and run quantifying script
         for experiment in experiment_conditions:
+            # ask for user input before proceeding with quantification
+            print("----- Now quantifying " + experiment.split(os.sep)[-1] + "-----")
+    
+            response = ''
+            while(True):
+                response = input('Would you like to proceed? (y/n)')
+                if response in ['y', 'n']:
+                    break
+            print()
+            if response == 'n':
+                continue
+
+            print("******")
+            print("Now quantifying: ", experiment.split(os.sep)[-1])
+            print("******")
+
             # create a subdirectory to store annotated cell count images if one does not already exist
             directory = os.path.join(experiment, "Cell Counts")
             if not os.path.exists(directory):
@@ -35,10 +69,6 @@ for e in experiments:
             # collect list of all tif files within each folder
             imgnames = [i for i in glob.glob(os.path.join(experiment, "*.tif"))]
             imgnames.sort()
-
-            print("******")
-            print("Now quantifying: ", experiment.split(os.sep)[-1])
-            print("******")
 
             # quantify cell counts and thresholds 
             raw_imgnames, final_cell_counts, thresholds = quantify.quantifyCells(imgnames)
@@ -49,5 +79,6 @@ for e in experiments:
             df.to_excel(writer, experiment.split(os.sep)[-1])
     
         writer.save()
-        print("Done with Culture: ", path.split(os.sep)[-2])
-    print("Done with Experiment: ", e.split(os.sep)[-2])
+        print("Done with Culture: ", path.split(os.sep)[-1])
+        print()
+    print("Done with Experiment: ", e.split(os.sep)[-1])
