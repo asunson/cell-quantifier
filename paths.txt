@@ -1,6 +1,8 @@
-# comment
-# comment 
+# you can leave comments to annotate path names 
+# text after a "#" will not be read
 
-# another comment 
+# place each experiment folder path on a new line
+
+# ex. experiment 21
 /Users/ASun/Documents/2018-19/iPython Notebooks/Exp. 21
 

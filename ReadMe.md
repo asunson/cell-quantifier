@@ -6,6 +6,8 @@ So the point of this program is to try and help make your life a little easier. 
 
 After you're done, it will drop a nice excel sheet called "Quantification Results.xlsx" containing the cell count for each image and threshold used. Each sheet in the workbook is specific to an experimental condition. One Excel book will be created for each culture (ex. LECs and no LECs). 
 
+**Note:** The Quantification Results excel sheet is easily overwritten, it is recommended to move the data to another file immediately upon program completion. 
+
 Right now this program makes the following key assumption about the folder layout:
 
                             ---------------
@@ -33,7 +35,7 @@ Provide the path to the experiment folder in the file "paths.txt". Please put ea
 
 Windows uses backslashes ("\\") whereas Macs use foward slashes ("/")
 
-Then, making sure that python is properly installed, double click the shortcut labeled "cell quantifier". It will open up a command prompt to run the program. 
+Then, making sure that python is properly installed, double click the shortcut labeled `cell quantifier`. It will open up a command prompt to run the program. 
 
 The program should start up and display the first image to be quantified. Initially, it will detect as many cells as possible based on the default threshold and minimum area values. Manual controls can be used to modify values and add/remove cells. 
 
@@ -48,6 +50,8 @@ If you would like to exit early, make sure you close out of the command prompt r
 There are a few built in features to make quantifying cells easier. 
 
 Threshold and Minimum Area bars: threshold and min area values can be modified by sliding the corresponding bars. The default values for threshold and min area are 40 and 35 respectively. Minimum area is in pixels so the conversion from pixel to real life measurement should be calculated. 
+
+The user has the ability to provide the program with a list of conditions to ignore (skip quantification) in `ignore.txt`.
 
 ## Controls
 
@@ -67,13 +71,15 @@ Threshold and Minimum Area bars: threshold and min area values can be modified b
 
 Things I should implement in the future:
 
-* A way to ignore specific experiments
-
 * A way to quantify just one experiment at a time
 
 * Make gaussian blur modifiable
 
 * Early exit feature (other than x'ing out of the command prompt or giving a keyboard interrupt)
+
+* Method to differentiate between the same condition within different cultures while ignoring
+
+* Ability to zoom in on an image
 
 
 
