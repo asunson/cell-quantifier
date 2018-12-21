@@ -23,10 +23,6 @@ ignore = file.readlines()
 experiments = parseText(experiments)
 ignore = parseText(ignore)
 
-print(experiments)
-print(ignore)
-
-
 # find all culture types used within each experiment
 for e in experiments:
     e_name = e.split(os.sep)[-1]
@@ -60,8 +56,8 @@ for e in experiments:
         
         # each condition contains images to be quantified. Scan through each and run quantifying script
         for condition in experiment_conditions:
-
             cond_name = condition.split(os.sep)[-1]
+            
             # check if user asked for condition to be ignored
             if cond_name in ignore:
                 print("Ignoring condition: ", cond_name)

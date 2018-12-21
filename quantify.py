@@ -38,12 +38,13 @@ def nothing(x):
 Clear any existing window with name 'image' and attach mouse call back function 
 and trackbars for threshold and area.  
 """
-def remakeWindow(t, a, pickCells, name):
+def remakeWindow(t, a, g, pickCells, name):
     cv2.destroyWindow(name)
     cv2.namedWindow(name, cv2.WINDOW_NORMAL)
     cv2.setMouseCallback(name, pickCells)
-    cv2.createTrackbar("min Threshold", name, t, 100, nothing)
-    cv2.createTrackbar("min Area", name, a, 200, nothing)
+    cv2.createTrackbar("Threshold", name, t, 100, nothing)
+    cv2.createTrackbar("Minimum Area", name, a, 200, nothing)
+    cv2.createTrackbar("Background Filter", name, g, 10, nothing)
 
 """
 Filter candidate cells by area (default 35 pixels). This value should be user defined based
@@ -56,9 +57,9 @@ def filterByArea(contours, min_area = 35):
 """
 Discover cells with input threshold and minimum area
 """
-def getContourImage(image, t, a):
+def getContourImage(image, t, a, g):
     # remove background noise
-    im_gauss = cv2.GaussianBlur(image, (3, 3), 0)
+    im_gauss = cv2.GaussianBlur(image, (g, g), 0)
     
     ret, thresh = cv2.threshold(im_gauss, t, 255, 0)
     _, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -92,27 +93,31 @@ def quantifyCells(imgnames):
     
     for i in range(len(images)):
         image = images[i]    
+        name = raw_imgnames[i]
 
-        # initialize image to intial threshold and minimum area
+        # initialize image to intial threshold, minimum area, and background filter
         old_t = 40
         old_a = 35
-        numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, old_t, old_a)
-        remakeWindow(old_t, old_a, pickCells, raw_imgnames[i])
+        old_g = 1
+        numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, old_t, old_a, old_g)
+        remakeWindow(old_t, old_a, old_g, pickCells, name)
 
         while(1):
-            t = cv2.getTrackbarPos("min Threshold", raw_imgnames[i])
-            a = cv2.getTrackbarPos("min Area", raw_imgnames[i])
+            t = cv2.getTrackbarPos("Threshold", name)
+            a = cv2.getTrackbarPos("Minimum Area", name)
+            g = 2 * cv2.getTrackbarPos("Background Filter", name) + 1
 
             # if either trackbar position changes, update image and window with new values
-            if t != old_t or a != old_a:
-                numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a)
+            if t != old_t or a != old_a or g != old_g:
+                numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a, g)
 
             # update previous t and a
             old_t = t
             old_a = a
+            old_g = g
 
             # display image
-            cv2.imshow(raw_imgnames[i], c_img)
+            cv2.imshow(name, c_img)
             k = cv2.waitKey(200) & 0xFF
             if k == 13:
                 # append number of cells to final list
@@ -125,10 +130,10 @@ def quantifyCells(imgnames):
                             cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 255, 0), 1)
                 
                 # find directory to save file in
-                directory = os.path.join(imgnames[i][:-len(raw_imgnames[i])], "Cell Counts")
+                directory = os.path.join(imgnames[i][:-len(name)], "Cell Counts")
 
                 # save annotated image
-                cv2.imwrite(os.path.join(directory, raw_imgnames[i].split('.')[-2] + " cell count.jpg"), c_img)
+                cv2.imwrite(os.path.join(directory, name.split('.')[-2] + " cell count.jpg"), c_img)
                 break
 
             # undo last change
@@ -138,10 +143,11 @@ def quantifyCells(imgnames):
 
             # reset image and default values
             if k == ord('r'):
-                cv2.setTrackbarPos("min Threshold", raw_imgnames[i], 40)
-                cv2.setTrackbarPos("min Area", raw_imgnames[i], 35)
-                numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a)
-                
+                cv2.setTrackbarPos("Threshold", name, 40)
+                cv2.setTrackbarPos("Minimum Area", name, 35)
+                cv2.setTrackbarPos("Background Filter", name, 3)
+                numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, t, a, g)
+
             # print values for debugging
             elif k == ord('a'):
                 print("Current Threshold: ", t)
