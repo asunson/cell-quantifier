@@ -81,7 +81,7 @@ def getContourImage(image, t, a, g):
 Produces GUI to quantify cells from list of images. Returns cell count for each image and threshold used. 
 Also saves a copy of each annotated/quantified image. 
 """
-def quantifyCells(imgnames):
+def quantifyCells(imgnames, defaults):
     global numCells, numCells_copy, c_img, c_img_copy
     
     images = [cv2.imread(img, cv2.IMREAD_GRAYSCALE) for img in imgnames]
@@ -96,16 +96,16 @@ def quantifyCells(imgnames):
         name = raw_imgnames[i]
 
         # initialize image to intial threshold, minimum area, and background filter
-        old_t = 40
-        old_a = 35
-        old_g = 1
+        old_t = int(defaults[0])
+        old_a = int(defaults[1])
+        old_g = int(defaults[2])
         numCells, numCells_copy, c_img, c_img_copy = getContourImage(image, old_t, old_a, old_g)
         remakeWindow(old_t, old_a, old_g, pickCells, name)
 
         while(1):
             t = cv2.getTrackbarPos("Threshold", name)
             a = cv2.getTrackbarPos("Minimum Area", name)
-            g = 2 * cv2.getTrackbarPos("Background Filter", name) + 1
+            g = 2 * cv2.getTrackbarPos("Background Filter", name) + 1 # filter size needs to be odd
 
             # if either trackbar position changes, update image and window with new values
             if t != old_t or a != old_a or g != old_g:

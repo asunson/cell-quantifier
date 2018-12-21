@@ -4,7 +4,9 @@ import os
 import pandas as pd
 import quantify
 
-def parseText(text):
+# remove comments from input text files
+def parseText(f):
+    text = f.readlines()
     res = [l.strip('\n') for l in text if not l.startswith('#')]
     res = [l for l in res if l is not '']
     return res
@@ -13,15 +15,14 @@ def parseText(text):
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-file = open(os.path.join(__location__, 'paths.txt'), "r") 
-experiments = file.readlines()
+f = open(os.path.join(__location__, 'paths.txt'), "r") 
+experiments = parseText(f)
 
-file = open(os.path.join(__location__, 'ignore.txt'), "r") 
-ignore = file.readlines()
+f = open(os.path.join(__location__, 'ignore.txt'), "r") 
+ignore = parseText(f)
 
-# remove comments from input text files
-experiments = parseText(experiments)
-ignore = parseText(ignore)
+f = open(os.path.join(__location__, 'defaults.txt'), "r") 
+defaults = parseText(f)
 
 # find all culture types used within each experiment
 for e in experiments:
@@ -57,7 +58,7 @@ for e in experiments:
         # each condition contains images to be quantified. Scan through each and run quantifying script
         for condition in experiment_conditions:
             cond_name = condition.split(os.sep)[-1]
-            
+
             # check if user asked for condition to be ignored
             if cond_name in ignore:
                 print("Ignoring condition: ", cond_name)
@@ -78,7 +79,7 @@ for e in experiments:
             imgnames.sort()
 
             # quantify cell counts and thresholds 
-            raw_imgnames, final_cell_counts, thresholds = quantify.quantifyCells(imgnames)
+            raw_imgnames, final_cell_counts, thresholds = quantify.quantifyCells(imgnames, defaults)
             
             # output final cell counts and thresholds corresponding to each image into excel sheet
             d = {"File Name": raw_imgnames, "Cell Count": final_cell_counts, "Threshold": thresholds}
