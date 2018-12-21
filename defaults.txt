@@ -1,0 +1,6 @@
+# threshold
+40
+# minimum area (this corresponds to a conversion of .92 um to pixel for minimum area of 35um)
+41
+# background filter
+1
