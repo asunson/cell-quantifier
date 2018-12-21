@@ -1,8 +1,5 @@
-# you can leave comments to annotate path names 
-# text after a "#" will not be read
-
-# place each experiment folder path on a new line
-
-# ex. experiment 21
-/Users/ASun/Documents/2018-19/iPython Notebooks/Exp. 21
+# to leave a comment, add a hashtag/pound sign before each line
+# comments in this file won't be read by the program
+# List paths underneath this line. Place each experiment folder on a new line. 
+J:\OncRsrch\Lymph\Lab Users\Aaron\Other\Exp. 21
 
