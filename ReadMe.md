@@ -1,6 +1,6 @@
 # User Guide
 
-This package was written for use by the Skobe Lab at the Icahn School of Medicine 
+This package was written for use by researchers in the Skobe Lab at the Icahn School of Medicine at Mt. Sinai.
 
 Hello! We all know that the current process of cell quantification is unnecessarily complicated. Right now, we need to keep switching between an excel sheet and the imaging program, deal with the fact that it doesn't switch screens properly, individually load each set of images for each experimental condition, manually adjust for background noise, eyeball how many cells were missed or how many to exclude, and so on...
 
